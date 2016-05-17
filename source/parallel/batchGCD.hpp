@@ -24,7 +24,7 @@ class BatchGCD {
         //constructor
         BatchGCD (vector<mpz_class>& keys);
         // factorization of the public keys
-        vector<Factor*> getFactorization ();
+        vector<Factor> getFactorization ();
         // print keys
         void printKeys ();
 };
