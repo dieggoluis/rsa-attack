@@ -51,8 +51,9 @@ vector<mpz_class> BatchGCD::getRemainders () {
 }
 
 //C++ wrapper to C gcd function
-mpz_class gcdCPP (mpz_class p1, mpz_class p2) {
+mpz_class BatchGCD::gcdCPP (mpz_class p1, mpz_class p2) {
     mpz_t foo;
+    mpz_init(foo);
     mpz_gcd(foo, p1.get_mpz_t(), p2.get_mpz_t());
     mpz_class ans(foo); 
     return ans;
