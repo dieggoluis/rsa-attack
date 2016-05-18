@@ -20,6 +20,7 @@ class BatchGCD {
     
         vector< vector<mpz_class> > productTree ();
         vector< mpz_class > getRemainders ();
+        mpz_class gcdCPP (mpz_class p1, mpz_class p2);
     public:
         //constructor
         BatchGCD (vector<mpz_class>& keys);

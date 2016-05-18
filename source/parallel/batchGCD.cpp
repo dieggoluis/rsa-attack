@@ -50,6 +50,14 @@ vector<mpz_class> BatchGCD::getRemainders () {
     //cout << endl;
 }
 
+//C++ wrapper to C gcd function
+mpz_class gcdCPP (mpz_class p1, mpz_class p2) {
+    mpz_t foo;
+    mpz_gcd(foo, p1.get_mpz_t(), p2.get_mpz_t());
+    mpz_class ans(foo); 
+    return ans;
+}
+
 //constructor
 BatchGCD::BatchGCD (vector<mpz_class>& keys) {
     this->keys = keys;
@@ -61,7 +69,7 @@ vector<Factor> BatchGCD::getFactorization () {
     vector<mpz_class> remainders = getRemainders();
     for (long i = 0; i < remainders.size(); i++) {
         mpz_class N = this->keys[i];
-        mpz_class p = gcd(N, remainders[i]/N);
+        mpz_class p = gcdCPP(N, remainders[i]/N);
         mpz_class q = N/p;
         factors.push_back(Factor(i, p, q));
     }
