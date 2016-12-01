@@ -12,6 +12,8 @@ class Factor {
     public:
         //constructor
         Factor (long i, mpz_class p, mpz_class q);
+
+        //gets
         long getIndex ();
         mpz_class getP();
         mpz_class getQ();

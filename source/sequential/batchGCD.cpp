@@ -10,10 +10,17 @@
 
 using namespace std;
 
+//C++ wrapper to C gcd function
+mpz_class BatchGCD::gcdCPP (mpz_class p1, mpz_class p2) {
+    mpz_t foo;
+    mpz_init(foo);
+    mpz_gcd(foo, p1.get_mpz_t(), p2.get_mpz_t());
+    mpz_class ans(foo); 
+    return ans;
+}
 
-vector< vector<mpz_class> > BatchGCD::productTree () {
-    vector< vector<mpz_class> > tree;
-    
+//fill product tree 
+void BatchGCD::initTree () {
     vector<mpz_class> v (this->keys);
     tree.push_back(v);
 
@@ -33,41 +40,47 @@ vector< vector<mpz_class> > BatchGCD::productTree () {
         tree.push_back(x);
         h++;
     }
-    return tree;
 }
 
 vector<mpz_class> BatchGCD::getRemainders () {
-    vector < vector<mpz_class> > tree = productTree ();
     for (long i = tree.size() - 2; i >= 0; i--) {
         for (long j = 0; j < tree[i].size(); j++) {
                 tree[i][j] = tree[i+1][j/2] % (tree[i][j] * tree[i][j]);
         }
     }
     return tree[0];
-    //debug
-    //for (int i=0; i<remainders.size(); i++)
-    //    cout << remainders[i] << " ";
-    //cout << endl;
 }
 
 //constructor
 BatchGCD::BatchGCD (vector<mpz_class>& keys) {
     this->keys = keys;
+    initTree();
 }
 
-// factorization of the public keys
+// get a possible factorization of the public keys
 vector<Factor> BatchGCD::getFactorization () {
     vector <Factor> factors;
     vector<mpz_class> remainders = getRemainders();
     for (long i = 0; i < remainders.size(); i++) {
         mpz_class N = this->keys[i];
-        mpz_class p = gcd(N, remainders[i]/N);
+        mpz_class p = gcdCPP(N, remainders[i]/N);
         mpz_class q = N/p;
         factors.push_back(Factor(i, p, q));
     }
     return factors;
 }
 
+//change root value (useful for ditributed algorithm)
+void BatchGCD::changeValueRoot(mpz_class x) {
+    this->tree[tree.size()-1][0] = x;
+}
+
+//get root value (useful for ditributed algorithm)
+mpz_class BatchGCD::getValueRoot() {
+    return this->tree[tree.size()-1][0];
+}
+
+//print keys
 void BatchGCD::printKeys () {
     for (long i = 0; i < this->keys.size(); i++)
         cout << this->keys[i] << " ";

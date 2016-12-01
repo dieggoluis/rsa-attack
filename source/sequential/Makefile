@@ -1,6 +1,6 @@
 CC=g++
 FLAGS=-lgmpxx -lgmp
-EXEC=test
+EXEC=main
 
 ALL: factors.o batchGCD.o main.o
 	$(CC) -o $(EXEC) factors.o batchGCD.o main.o $(FLAGS)
@@ -16,10 +16,11 @@ batchGCD.o: batchGCD.cpp batchGCD.hpp
 
 clean:
 	rm -rf test
+	rm -f *~
 	rm -rf *.o
 
-test1:
-	./test 100 < ../../data/tiny.dat
+test_tiny:
+	./$(EXEC) 100 ../../data/tiny.dat
 
-test2:
-	./test 2000 < ../../data/gen512-3233331101-0.dat
+test_big:
+	./$(EXEC) 2000 ../../data/gen512-3233331101-0.dat

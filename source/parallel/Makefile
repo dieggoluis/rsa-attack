@@ -1,6 +1,8 @@
-CC=g++
+CC=mpic++
 FLAGS=-lgmpxx -lgmp
-EXEC=test
+EXEC=main
+NPROC_TINY=20
+NPROC_BIG=50
 
 ALL: factors.o batchGCD.o main.o
 	$(CC) -o $(EXEC) factors.o batchGCD.o main.o $(FLAGS)
@@ -15,11 +17,12 @@ batchGCD.o: batchGCD.cpp batchGCD.hpp
 	$(CC) -c batchGCD.cpp
 
 clean:
-	rm -rf test
+	rm -rf main
 	rm -rf *.o
+	rm -f *~
 
-test1:
-	./test 100 < ../../data/tiny.dat
+test_tiny:
+	mpirun -np $(NPROC_TINY) $(EXEC) ../../data/tiny.dat
 
-test2:
-	./test 2000 < ../../data/gen512-3233331101-0.dat
+test_big:
+	mpirun -np $(NPROC_BIG) $(EXEC) ../../data/gen512-3233331101-0.dat
